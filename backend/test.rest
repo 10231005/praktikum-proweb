@@ -1,0 +1,27 @@
+GET http://localhost:3001/ 
+
+###
+
+POST http://localhost:3001/data
+Content-Type: application/json
+
+{
+  "nama": "Adhyasta firdaus "
+}
+
+### 
+POST http://localhost:3001/produk
+Content-Type: application/json
+
+{
+"nama": "Produk D",
+"harga": 15000
+}
+
+### 
+
+GET http://localhost:3001/produk
+Content-Type: application/json
+
+
+
