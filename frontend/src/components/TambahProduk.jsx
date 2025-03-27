@@ -1,58 +1,67 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
+import { Button, Form, Alert, Card } from "react-bootstrap";
 
-function TambahProduk() {
-  const [nama, setNama] = useState('');
-  const [harga, setHarga] = useState('');
-  const [error, setError] = useState('');
+function TambahProduk({ onProdukTambah }) {
+  const [nama, setNama] = useState("");
+  const [harga, setHarga] = useState("");
+  const [notif, setNotif] = useState("");
+  const [notifVariant, setNotifVariant] = useState("success"); // Warna alert dinamis
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validasi input
     if (!nama || !harga) {
-      setError('Nama dan Harga wajib diisi');
+      setNotif("⚠️ Nama dan Harga wajib diisi!");
+      setNotifVariant("danger");
       return;
     }
 
-    setError('');
-    
-    axios
-      .post('http://localhost:3001/produk', { nama, harga })
-      .then((res) => {
-        console.log('Produk berhasil ditambah:', res.data);
-        setNama('');
-        setHarga('');
-      })
-      .catch((err) => {
-        console.error('Error menambah produk:', err);
-      });
+    try {
+      await axios.post("http://localhost:3001/produk", { nama, harga });
+
+      setNotif("✅ Produk berhasil ditambahkan!");
+      setNotifVariant("success");
+      setNama("");
+      setHarga("");
+
+      if (onProdukTambah) {
+        await onProdukTambah();
+      }
+
+      setTimeout(() => setNotif(""), 3000);
+    } catch (error) {
+      setNotif("❌ Gagal menambahkan produk!");
+      setNotifVariant("danger");
+    }
   };
 
   return (
-    <div>
-      <h2>Tambah Produk</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nama Produk: </label>
-          <input
-            type="text"
-            value={nama}
-            onChange={(e) => setNama(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Harga: </label>
-          <input
-            type="number"
-            value={harga}
-            onChange={(e) => setHarga(e.target.value)}
-          />
-        </div>
-        <button type="submit">Simpan</button>
-      </form>
-    </div>
+    <div className="card p-4 shadow-sm"> 
+  <h3 className="text-primary"></h3>
+  {notif && <Alert variant="success">{notif}</Alert>}
+  <Form onSubmit={handleSubmit}>
+    <Form.Group className="mb-3">
+      <Form.Label>Nama Produk</Form.Label>
+      <Form.Control
+        type="text"
+        className="form-control"
+        value={nama}
+        onChange={(e) => setNama(e.target.value)}
+      />
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Label>Harga</Form.Label>
+      <Form.Control
+        type="number"
+        className="form-control"
+        value={harga}
+        onChange={(e) => setHarga(e.target.value)}
+      />
+    </Form.Group>
+    <Button type="submit" variant="primary" className="w-100">Simpan</Button>
+  </Form>
+</div>
   );
 }
 
