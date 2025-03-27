@@ -3,6 +3,8 @@
 ## Deskripsi Proyek
 Aplikasi E-Commerce Product Management System adalah sistem pengelolaan produk berbasis web yang dibangun menggunakan React.js untuk frontend dan Express.js untuk backend. Aplikasi ini menyediakan antarmuka yang modern dan intuitif untuk manajemen produk dalam konteks e-commerce.
 
+
+Link Repositori Aplikasi Final : https://github.com/10231005/praktikum-proweb
 ## Teknologi yang Digunakan
 - Frontend:
   - React.js
